@@ -2,12 +2,16 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
+from settings import Settings
+
 from .database import DatabaseConnection
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    db_connection = DatabaseConnection("memory://")
+    settings = Settings()
+
+    db_connection = DatabaseConnection(settings.DATABASE_URL)
 
     app.state.db_connection = db_connection
 
