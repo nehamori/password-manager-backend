@@ -1,0 +1,42 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-950">
+
+    <div class="w-full max-w-md bg-gray-900 rounded-2xl shadow-xl p-8">
+
+        <!-- переключение -->
+        <div class="flex mb-6 bg-gray-800 rounded-lg p-1">
+
+            <button
+                (click)="showLogin()"
+                class="flex-1 py-2 rounded-lg transition"
+                [ngClass]="mode === 'login' ? 'bg-purple-600 text-white' : 'text-gray-400'">
+                Login
+            </button>
+
+            <button
+                (click)="showRegister()"
+                class="flex-1 py-2 rounded-lg transition"
+                [ngClass]="mode === 'register' ? 'bg-purple-600 text-white' : 'text-gray-400'">
+                Register
+            </button>
+
+        </div>
+
+        @if (mode === 'login') {
+        <app-login-signin></app-login-signin>
+        } @else if (mode === 'register') {
+        <app-login-register></app-login-register>
+        }
+
+        <div class="flex items-center my-6">
+            <div class="flex-1 h-px bg-gray-700"></div>
+            <span class="px-3 text-gray-400 text-sm">or</span>
+            <div class="flex-1 h-px bg-gray-700"></div>
+        </div>
+
+        <div class="flex gap-5" style="flex-direction: column;">
+            <app-telegram-widget />
+            <app-discord-widget />
+        </div>
+    </div>
+
+</div>

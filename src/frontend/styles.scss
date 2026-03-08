@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* global reset or other directives can still go here */
+* {
+  margin: 0;
+  padding: 0;
+}

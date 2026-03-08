@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Node
+node_modules/
+dist/
+out-tsc/
+
+# Electron builder
+build/
+
+# Environment files
+*.env
+
+# IDEs
+.vscode/
+
+# Angular
+.angular/
