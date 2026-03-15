@@ -1,14 +1,14 @@
 <div class="min-h-screen bg-gray-950 text-white flex flex-col">
     <nav
         class="max-w-7xl mx-auto w-full px-6 py-6 flex justify-between items-center">
-        <a href="/" class="flex items-center gap-3 font-semibold text-lg">
-            <img src="/favicon.jpg" alt="BlinkPass logo"
+        <a [routerLink]="isElectron ? '/login' : '/'" class="flex items-center gap-3 font-semibold text-lg">
+            <img src="favicon.jpg" alt="BlinkPass logo"
                 class="w-8 h-8 object-contain">
             BlinkPass
         </a>
         <div class="hidden md:flex items-center gap-8 text-sm text-gray-400">
             <a
-                href="/"
+                [routerLink]="isElectron ? '/login' : '/'"
                 class="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-lg text-white font-semibold transition">
                 Home
             </a>

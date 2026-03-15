@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 import { environment } from '../../../environments/environment';
 import { AuthWidgets } from "../../components/login";
@@ -13,7 +14,7 @@ export { EnterPassword } from './enter-password';
 
 @Component({
     selector: 'app-login',
-    imports: [CommonModule, AuthWidgets],
+    imports: [CommonModule, AuthWidgets, RouterLink],
     templateUrl: './index.html',
 })
 export class Login {
