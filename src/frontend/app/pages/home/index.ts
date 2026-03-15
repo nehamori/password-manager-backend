@@ -11,7 +11,12 @@ export class Home implements OnInit {
   ngOnInit(): void {
     const ua = navigator.userAgent.toLowerCase();
 
-    if (ua.includes('win')) {
+    if (ua.includes('android')) {
+      this.platform = 'Android';
+      this.downloadUrl = '/downloads/blinkpass-android.apk';
+    }
+
+    else if (ua.includes('win')) {
       this.platform = 'Windows';
       this.downloadUrl = '/downloads/blinkpass-win.exe';
     }
@@ -26,5 +31,4 @@ export class Home implements OnInit {
       this.downloadUrl = '/downloads/blinkpass-linux.AppImage';
     }
   }
-
 }

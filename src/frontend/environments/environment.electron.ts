@@ -1,4 +1,4 @@
 export const environment = {
     baseApiUrl: 'https://api.blinkpass.app/',
-    isElectron: false,
+    isElectron: true,
 };

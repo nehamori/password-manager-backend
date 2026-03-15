@@ -1,0 +1,92 @@
+name: Release
+
+on:
+    push:
+        tags:
+            - "v*"
+    workflow_dispatch:
+
+permissions:
+    contents: write
+
+jobs:
+    electron:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [windows-latest, macos-latest, ubuntu-latest]
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+                  cache: npm
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Build Angular (electron)
+              run: npm run build:electron
+
+            - name: Build and publish Electron app
+              run: npx electron-builder --publish always
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    android:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+                  cache: npm
+
+            - name: Setup Java
+              uses: actions/setup-java@v4
+              with:
+                  distribution: temurin
+                  java-version: 17
+
+            - name: Setup Android SDK
+              uses: android-actions/setup-android@v3
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Build Angular (android)
+              run: npm run build:android
+
+            - name: Add Android platform
+              run: npx cap add android
+
+            - name: Sync Capacitor
+              run: npx cap sync android
+
+            - name: Decode keystore
+              run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > ${{ github.workspace }}/release.keystore
+
+            - name: Build signed APK
+              run: |
+                  cd android
+                  ./gradlew assembleRelease \
+                    -Pandroid.injected.signing.store.file=${{ github.workspace }}/release.keystore \
+                    -Pandroid.injected.signing.store.password=${{ secrets.ANDROID_STORE_PASSWORD }} \
+                    -Pandroid.injected.signing.key.alias=${{ secrets.ANDROID_KEY_ALIAS }} \
+                    -Pandroid.injected.signing.key.password=${{ secrets.ANDROID_KEY_PASSWORD }}
+
+            - name: Upload APK to release
+              uses: softprops/action-gh-release@v2
+              with:
+                  files: android/app/build/outputs/apk/release/app-release.apk
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
