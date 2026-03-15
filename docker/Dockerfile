@@ -1,4 +1,4 @@
-FROM python:3.12-slim AS builder
+FROM python:3.12-alpine AS builder
 
 ENV POETRY_VERSION=2.1.3 \
     POETRY_HOME=/opt/poetry \
@@ -11,20 +11,25 @@ ENV PATH="$POETRY_HOME/bin:$PATH"
 
 WORKDIR /app
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends curl build-essential \
-    && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache \
+    build-base \
+    curl \
+    libffi-dev \
+    openssl-dev \
+    postgresql-dev
 
 RUN curl -sSL https://install.python-poetry.org | python3 -
 
 COPY pyproject.toml poetry.lock ./
 RUN poetry install --only main --no-ansi
 
-FROM python:3.12-slim AS runtime
+FROM python:3.12-alpine AS runtime
 
-RUN wget -q -t3 'https://packages.doppler.com/public/cli/rsa.8004D9FF50437357.key' -O /etc/apk/keys/cli@doppler-8004D9FF50437357.rsa.pub && \
-    echo 'https://packages.doppler.com/public/cli/alpine/any-version/main' | tee -a /etc/apk/repositories && \
-    apk add doppler
+RUN apk add --no-cache ca-certificates curl libstdc++ \
+    && curl -Ls -o /etc/apk/keys/cli@doppler-8004D9FF50437357.rsa.pub \
+    https://packages.doppler.com/public/cli/rsa.8004D9FF50437357.key \
+    && echo 'https://packages.doppler.com/public/cli/alpine/any-version/main' >> /etc/apk/repositories \
+    && apk add --no-cache doppler
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
