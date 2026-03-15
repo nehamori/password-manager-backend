@@ -58,15 +58,15 @@
     ],
     "win": {
       "target": "nsis",
-      "artifactName": "BlinkPass-${version}-windows.${ext}"
+      "artifactName": "BlinkPass-${env.RELEASE_VERSION}-windows.${ext}"
     },
     "mac": {
       "target": "dmg",
-      "artifactName": "BlinkPass-${version}-macos.${ext}"
+      "artifactName": "BlinkPass-${env.RELEASE_VERSION}-macos.${ext}"
     },
     "linux": {
       "target": "AppImage",
-      "artifactName": "BlinkPass-${version}-linux.${ext}"
+      "artifactName": "BlinkPass-${env.RELEASE_VERSION}-linux.${ext}"
     },
     "publish": {
       "provider": "github"
