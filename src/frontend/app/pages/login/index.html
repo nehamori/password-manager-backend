@@ -50,16 +50,7 @@
                     <div class="flex-1 h-px bg-gray-800"></div>
                 </div>
 
-                <div class="flex gap-4 flex-col">
-                    @if (telegramWidgetReady()) {
-                    <app-telegram-widget (auth)="telegramAuth($event)"
-                        [telegramBotName]="telegramBotName"></app-telegram-widget>
-                    }
-                    @if (discordWidgetReady()) {
-                    <app-discord-widget [clientId]="discordClientId"
-                        [redirectUri]="discordRedirectUri"></app-discord-widget>
-                    }
-                </div>
+                <app-login-auth-widgets></app-login-auth-widgets>
             </div>
         </div>
     </section>

@@ -6,11 +6,19 @@ import { CryptoService } from './crypto';
 @Injectable({
     providedIn: 'root',
 })
-export class ClientEncryption {
+export class LoginFSM {
     pendingLogin = signal<LoginResponse | null>(null);
     encryptionKey = signal<Uint8Array | null>(null);
 
     constructor(private api: ApiClient, private router: Router) { }
+
+    setupIsWebsiteLogin(isWebsiteLogin: boolean) {
+        sessionStorage.setItem('is_website_login', isWebsiteLogin ? '1' : '0');
+    }
+
+    isWebsiteLogin(): boolean {
+        return sessionStorage.getItem('is_website_login') === '1';
+    }
 
     async loginByTelegram(data: TelegramLoginData) {
         await this.loginProcess(await this.api.loginByTelegram(data));
@@ -20,13 +28,20 @@ export class ClientEncryption {
         await this.loginProcess(await this.api.loginByDiscord(data));
     }
 
+    async loginByBrowserData(data: string) {
+        const decodedData = this.decodeLoginData(data);
+
+        this.setupIsWebsiteLogin(true);
+        this.pendingLogin.set(decodedData);
+        await this.router.navigate(['/login/enter-password']);
+    }
+
     async completeLogin(password: string): Promise<void> {
         const pending = this.pendingLogin();
         if (!pending) throw new Error('No pending login');
 
         const { loginToken, loginChallenge, isNewUser } = pending;
 
-        // Derive master key: argon2id(password, utf8(salt))
         const saltBytes = new TextEncoder().encode(loginChallenge.salt);
         const masterKey = await CryptoService.deriveKey(password, saltBytes);
         const verifier = CryptoService.bytesToHex(masterKey);
@@ -34,8 +49,6 @@ export class ClientEncryption {
         if (isNewUser) {
             await this.api.loginComplete(loginToken, { verifier });
         } else {
-            // HMAC-SHA256(utf8(verifier), hexToBytes(challenge))
-            // mirrors backend: hmac.new(verifier.encode(), bytes.fromhex(challenge), "sha256")
             const hmacKey = new TextEncoder().encode(verifier);
             const challengeBytes = CryptoService.hexToBytes(loginChallenge.challenge);
             const proofBytes = await CryptoService.hmacSHA256(hmacKey, challengeBytes);
@@ -49,7 +62,32 @@ export class ClientEncryption {
     }
 
     private async loginProcess(data: LoginResponse): Promise<void> {
-        this.pendingLogin.set(data);
-        this.router.navigate(['/login/enter-password']);
+        if (this.isWebsiteLogin()) {
+            this.pendingLogin.set(data);
+            this.router.navigate(['/login/enter-password']);
+        } else {
+            const loginDataBase64 = this.encodeLoginData(data);
+            window.location.href = `blinkpass://login?data=${encodeURIComponent(loginDataBase64)}`;
+        }
+    }
+
+    private encodeLoginData(data: LoginResponse): string {
+        const json = JSON.stringify(data);
+        const bytes = new TextEncoder().encode(json);
+        let binary = '';
+
+        for (const byte of bytes) {
+            binary += String.fromCharCode(byte);
+        }
+
+        return btoa(binary);
+    }
+
+    private decodeLoginData(data: string): LoginResponse {
+        const binary = atob(data);
+        const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+        const json = new TextDecoder().decode(bytes);
+
+        return JSON.parse(json) as LoginResponse;
     }
 }

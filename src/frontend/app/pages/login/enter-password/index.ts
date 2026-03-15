@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ClientEncryption } from '../../../services/client-encryption';
+import { LoginFSM } from '../../../services/login_fsm';
 
 @Component({
     selector: 'app-login-enter-password',
@@ -14,12 +14,12 @@ export class EnterPassword implements OnInit {
     error = signal<string | null>(null);
 
     constructor(
-        readonly clientEncryption: ClientEncryption,
+        readonly loginFsm: LoginFSM,
         private router: Router,
     ) { }
 
     ngOnInit() {
-        if (!this.clientEncryption.pendingLogin()) {
+        if (!this.loginFsm.pendingLogin()) {
             this.router.navigate(['/login']);
         }
     }
@@ -31,7 +31,7 @@ export class EnterPassword implements OnInit {
         this.error.set(null);
 
         try {
-            await this.clientEncryption.completeLogin(this.password());
+            await this.loginFsm.completeLogin(this.password());
             this.router.navigate(['/']);
         } catch (e) {
             this.error.set(e instanceof Error ? e.message : 'Failed to complete login. Please try again.');

@@ -20,8 +20,8 @@ class UserOrm(BaseSqlModel):
 class UserLoginTokenOrm(BaseSqlModel):
     __tablename__ = "user_login_tokens"
 
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
-    token: Mapped[str] = mapped_column(unique=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    token: Mapped[str] = mapped_column(primary_key=True)
     challenge: Mapped[str]
     expires_at: Mapped[datetime_tz]
 

@@ -1,7 +1,9 @@
 <div class="min-h-screen bg-gray-950 text-white flex flex-col">
-    <nav class="max-w-7xl mx-auto w-full px-6 py-6 flex justify-between items-center">
+    <nav
+        class="max-w-7xl mx-auto w-full px-6 py-6 flex justify-between items-center">
         <a href="/" class="flex items-center gap-3 font-semibold text-lg">
-            <img src="/favicon.jpg" alt="BlinkPass logo" class="w-8 h-8 object-contain">
+            <img src="/favicon.jpg" alt="BlinkPass logo"
+                class="w-8 h-8 object-contain">
             BlinkPass
         </a>
         <div class="hidden md:flex items-center gap-8 text-sm text-gray-400">
@@ -9,9 +11,11 @@
         </div>
     </nav>
 
-    <section class="max-w-7xl mx-auto w-full px-6 pt-10 pb-20 flex-1 flex items-center justify-center">
+    <section
+        class="max-w-7xl mx-auto w-full px-6 pt-10 pb-20 flex-1 flex items-center justify-center">
         <div class="w-full max-w-xl">
-            <div class="bg-gray-900 border border-gray-800 rounded-2xl shadow-xl shadow-black/20 p-6 md:p-8">
+            <div
+                class="bg-gray-900 border border-gray-800 rounded-2xl shadow-xl shadow-black/20 p-6 md:p-8">
                 <div class="mb-6 text-center">
                     <h1 class="text-2xl md:text-3xl font-bold text-white mb-2">
                         Enter your master password
@@ -22,7 +26,7 @@
                     </p>
                 </div>
 
-                @if (clientEncryption.pendingLogin(); as login) {
+                @if (loginFsm.pendingLogin(); as login) {
                 <p class="text-xs text-gray-500 text-center mb-6">
                     Signed in as user #{{ login.user.id }}
                 </p>
@@ -30,7 +34,8 @@
 
                 <div class="space-y-4">
                     <div class="space-y-2">
-                        <label class="block text-sm font-medium text-gray-300" for="master-password">
+                        <label class="block text-sm font-medium text-gray-300"
+                            for="master-password">
                             Master password
                         </label>
                         <input
@@ -60,7 +65,8 @@
     </section>
 
     <footer class="mt-auto border-t border-gray-800">
-        <div class="max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row justify-between text-sm text-gray-500 gap-3">
+        <div
+            class="max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row justify-between text-sm text-gray-500 gap-3">
             <div>© 2026 BlinkPass</div>
             <div>Your password never leaves your device</div>
         </div>

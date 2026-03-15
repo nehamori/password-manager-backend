@@ -1,0 +1,10 @@
+<div class="flex gap-4 flex-col">
+    @if (telegramWidgetReady()) {
+    <app-telegram-widget (auth)="telegramAuth($event)"
+        [telegramBotName]="telegramBotName"></app-telegram-widget>
+    }
+    @if (discordWidgetReady()) {
+    <app-discord-widget [clientId]="discordClientId"
+        [redirectUri]="discordRedirectUri"></app-discord-widget>
+    }
+</div>

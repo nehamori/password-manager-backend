@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { ClientEncryption } from '../../../services/client-encryption';
+import { LoginFSM } from '../../../services/login_fsm';
 
 @Component({
     selector: 'app-discord',
@@ -14,7 +14,7 @@ export class DiscordCallbackPage implements OnInit {
         'BlinkPass is validating the Discord response and preparing the authenticated session.'
     );
 
-    constructor(private clientEncryption: ClientEncryption, private router: Router) { }
+    constructor(private loginFsm: LoginFSM, private router: Router) { }
 
     async ngOnInit() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -29,7 +29,7 @@ export class DiscordCallbackPage implements OnInit {
         }
 
         try {
-            await this.clientEncryption.loginByDiscord({ code: code, redirectUri: redirectUri });
+            await this.loginFsm.loginByDiscord({ code: code, redirectUri: redirectUri });
         } catch (error) {
             this.hasError.set(true);
             this.statusMessage.set(this.getErrorMessage(error));
