@@ -79,12 +79,23 @@
     },
     "linux": {
       "maintainer": "BlinkPass Team <support@blinkpass.app>",
+      "category": "Utility",
       "target": [
         "AppImage",
         "deb",
         "pacman"
       ],
       "artifactName": "BlinkPass-${env.RELEASE_VERSION}-linux.${ext}"
+    },
+    "pacman": {
+      "depends": [
+        "gtk3",
+        "nss",
+        "libxss",
+        "libxtst",
+        "libnotify",
+        "xdg-utils"
+      ]
     },
     "publish": {
       "provider": "github"
