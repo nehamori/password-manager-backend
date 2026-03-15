@@ -1,4 +1,4 @@
-name: Release
+name: Release Desktop And Android
 
 on:
     push:
@@ -11,6 +11,7 @@ permissions:
 
 jobs:
     electron:
+        name: Electron (${{ matrix.os }})
         runs-on: ${{ matrix.os }}
         strategy:
             fail-fast: false
@@ -33,12 +34,35 @@ jobs:
             - name: Build Angular (electron)
               run: npm run build:electron
 
-            - name: Build and publish Electron app
-              run: npx electron-builder --publish always
+            - name: Build Electron app
+              run: npx electron-builder --publish never
+
+            - name: Upload Windows installer to release
+              if: matrix.os == 'windows-latest'
+              uses: softprops/action-gh-release@v2
+              with:
+                  files: dist/electron/*.exe
               env:
-                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Upload macOS installer to release
+              if: matrix.os == 'macos-latest'
+              uses: softprops/action-gh-release@v2
+              with:
+                  files: dist/electron/*.dmg
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Upload Linux installer to release
+              if: matrix.os == 'ubuntu-latest'
+              uses: softprops/action-gh-release@v2
+              with:
+                  files: dist/electron/*.AppImage
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     android:
+        name: Android (ubuntu-latest)
         runs-on: ubuntu-latest
 
         steps:
@@ -84,9 +108,12 @@ jobs:
                     -Pandroid.injected.signing.key.alias=${{ secrets.ANDROID_KEY_ALIAS }} \
                     -Pandroid.injected.signing.key.password=${{ secrets.ANDROID_KEY_PASSWORD }}
 
+            - name: Rename APK
+              run: cp android/app/build/outputs/apk/release/app-release.apk "android/app/build/outputs/apk/release/BlinkPass-${{ github.ref_name }}-android.apk"
+
             - name: Upload APK to release
               uses: softprops/action-gh-release@v2
               with:
-                  files: android/app/build/outputs/apk/release/app-release.apk
+                  files: android/app/build/outputs/apk/release/BlinkPass-${{ github.ref_name }}-android.apk
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

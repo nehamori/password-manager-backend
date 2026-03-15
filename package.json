@@ -57,13 +57,16 @@
       "package.json"
     ],
     "win": {
-      "target": "nsis"
+      "target": "nsis",
+      "artifactName": "BlinkPass-${version}-windows.${ext}"
     },
     "mac": {
-      "target": "dmg"
+      "target": "dmg",
+      "artifactName": "BlinkPass-${version}-macos.${ext}"
     },
     "linux": {
-      "target": "AppImage"
+      "target": "AppImage",
+      "artifactName": "BlinkPass-${version}-linux.${ext}"
     },
     "publish": {
       "provider": "github"
