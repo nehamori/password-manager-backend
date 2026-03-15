@@ -28,6 +28,8 @@ class DiscordLoginRequest(BaseModel):
 
 class User(BaseModel):
     id: int
+    username: str
+    avatar_url: str | None
 
 
 class LoginChallenge(BaseModel):
@@ -50,3 +52,9 @@ class LoginCompleteRequest(BaseModel):
     verifier: str | None = None
 
     model_config = ConfigDict(populate_by_name=True)
+
+
+class LoginCompleteResponse(BaseModel):
+    user: User
+
+    model_config = ConfigDict(serialize_by_alias=True, validate_by_alias=False)

@@ -2,6 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiClient } from './api';
 import { CryptoService } from './crypto';
+import { UserService } from './user';
 
 @Injectable({
     providedIn: 'root',
@@ -10,7 +11,7 @@ export class LoginFSM {
     pendingLogin = signal<LoginResponse | null>(null);
     encryptionKey = signal<Uint8Array | null>(null);
 
-    constructor(private api: ApiClient, private router: Router) { }
+    constructor(private api: ApiClient, private router: Router, private userService: UserService) { }
 
     setupIsWebsiteLogin(isWebsiteLogin: boolean) {
         sessionStorage.setItem('is_website_login', isWebsiteLogin ? '1' : '0');
@@ -47,18 +48,22 @@ export class LoginFSM {
         const verifier = CryptoService.bytesToHex(masterKey);
 
         if (isNewUser) {
-            await this.api.loginComplete(loginToken, { verifier });
+            const result = await this.api.loginComplete(loginToken, { verifier });
+            this.userService.setUser(result.user);
         } else {
             const hmacKey = new TextEncoder().encode(verifier);
             const challengeBytes = CryptoService.hexToBytes(loginChallenge.challenge);
             const proofBytes = await CryptoService.hmacSHA256(hmacKey, challengeBytes);
             const challengeProof = CryptoService.bytesToHex(proofBytes);
 
-            await this.api.loginComplete(loginToken, { challengeProof });
+            const result = await this.api.loginComplete(loginToken, { challengeProof });
+            this.userService.setUser(result.user);
         }
 
         this.encryptionKey.set(masterKey);
         this.pendingLogin.set(null);
+        
+        this.router.navigate(['/dashboard']);
     }
 
     private async loginProcess(data: LoginResponse): Promise<void> {

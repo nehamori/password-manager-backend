@@ -23,7 +23,12 @@ class UsersDAO:
         discord_user = discord_user_result.scalar()
         if not discord_user:
             if assign_to_user_id is None:
-                user_orm = UserOrm(account_verified=True, salt=random_salt)
+                user_orm = UserOrm(
+                    account_verified=True,
+                    salt=random_salt,
+                    nickname=discord_data.username,
+                    avatar_url=discord_data.avatar_url,
+                )
                 self.session.add(user_orm)
                 await self.session.flush([user_orm])
                 assign_to_user_id = user_orm.id
@@ -51,7 +56,15 @@ class UsersDAO:
         telegram_user = telegram_user_result.scalar()
         if not telegram_user:
             if assign_to_user_id is None:
-                user_orm = UserOrm(account_verified=True, salt=random_salt)
+                telegram_full_name = (
+                    f"{user.first_name} {user.last_name or ''}".strip()
+                )
+                user_orm = UserOrm(
+                    account_verified=True,
+                    salt=random_salt,
+                    nickname=user.username or telegram_full_name,
+                    avatar_url=user.photo_url,
+                )
                 self.session.add(user_orm)
                 await self.session.flush([user_orm])
                 assign_to_user_id = user_orm.id

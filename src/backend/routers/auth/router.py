@@ -3,19 +3,20 @@ from datetime import datetime, timezone
 from aiogram.types import User as BotUser
 from aiogram.utils.auth_widget import check_integrity
 from aiogram.utils.web_app import WebAppUser as TelegramUser
-from fastapi import APIRouter, Depends, Request, HTTPException
+from fastapi import APIRouter, Depends, Request, HTTPException, Response
 from pydantic import ValidationError
 
 from database import DAO, UserOrm, UserLoginTokenOrm
-from routers.depends import get_db_dao
+from routers.depends import get_db_dao, get_user
 from settings import Settings
-from utils import DiscordCodeManager, Cryptography
+from utils import DiscordCodeManager, Cryptography, JWTManager
 
 from .models import (
     DiscordLoginDataResponse,
     DiscordLoginRequest,
     LoginChallenge,
     LoginCompleteRequest,
+    LoginCompleteResponse,
     LoginResponse,
     TelegramLoginDataResponse,
     TelegramLoginRequest,
@@ -24,6 +25,11 @@ from .models import (
 
 
 auth_router = APIRouter(prefix="/auth", tags=["auth"])
+
+
+@auth_router.get("/me")
+async def me(user: UserOrm = Depends(get_user)) -> User:
+    return User(id=user.id, username=user.nickname, avatar_url=user.avatar_url)
 
 
 @auth_router.post("/register/email")
@@ -61,7 +67,7 @@ async def login_return_challenge(
     await dao.flush([login_token_orm])
 
     return LoginResponse(
-        user=User(id=user.id),
+        user=User(id=user.id, username=user.nickname, avatar_url=user.avatar_url),
         login_challenge=LoginChallenge(salt=user.salt, challenge=login_token.challenge),
         login_token=login_token.token,
         is_new_user=not user.verifier,
@@ -104,15 +110,23 @@ async def login_discord(
     return await login_return_challenge(user, dao, crypto)
 
 
-@auth_router.post("/login/complete")
+@auth_router.post("/login/complete", response_model=LoginCompleteResponse)
 async def login_complete(
-    body: LoginCompleteRequest, request: Request, dao: DAO = Depends(get_db_dao)
+    body: LoginCompleteRequest,
+    request: Request,
+    response: Response,
+    dao: DAO = Depends(get_db_dao),
 ):
     crypto: Cryptography = request.app.state.crypto
+    jwt: JWTManager = request.app.state.jwt
 
     login_token_result = await dao.get_login_token(body.login_token)
     now = datetime.now(tz=timezone.utc)
-    if not login_token_result or login_token_result.expires_at < now:
+    if not login_token_result:
+        raise HTTPException(status_code=400, detail="Invalid or expired login token")
+
+    if login_token_result.expires_at < now:
+        await dao.delete_login_token(login_token_result.token)
         raise HTTPException(status_code=400, detail="Invalid or expired login token")
 
     user = await dao.get_user_by_id(login_token_result.user_id)
@@ -141,4 +155,17 @@ async def login_complete(
 
     await dao.delete_login_token(login_token_result.token)
 
-    return {"ok": True}
+    jwt_token = jwt.create_token(user.id)
+    response.set_cookie(
+        key="auth_token",
+        value=jwt_token,
+        httponly=True,
+        secure=request.url.scheme == "https",
+        samesite="lax",
+        max_age=int(jwt.default_expiration.total_seconds()),
+        path="/",
+    )
+
+    return LoginCompleteResponse(
+        user=User(id=user.id, username=user.nickname, avatar_url=user.avatar_url)
+    )

@@ -7,7 +7,7 @@ from settings import Settings
 
 from database import DatabaseConnection
 from routers import auth_router
-from utils import DiscordCodeManager, Cryptography
+from utils import DiscordCodeManager, Cryptography, JWTManager
 
 
 @asynccontextmanager
@@ -25,6 +25,7 @@ async def lifespan(app: FastAPI):
 
     app.state.discord_code_manager = discord_code_manager
     app.state.crypto = Cryptography()
+    app.state.jwt = JWTManager(settings.SECRET_KEY)
     app.state.db_connection = db_connection
     app.state.telegram_bot_user = telegram_bot_user
     app.state.settings = settings

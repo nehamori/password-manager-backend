@@ -42,4 +42,11 @@ export class ApiClient {
             { loginToken, ...payload }
         ));
     }
+
+    getMe() {
+        return firstValueFrom(this.http.get<User>(
+            environment.baseApiUrl + 'auth/me',
+            { withCredentials: true }
+        ));
+    }
 }

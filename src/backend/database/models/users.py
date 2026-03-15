@@ -10,6 +10,8 @@ class UserOrm(BaseSqlModel):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    nickname: Mapped[str]
+    avatar_url: Mapped[str | None]
     salt: Mapped[str]
     verifier: Mapped[str | None]
     account_verified: Mapped[bool] = mapped_column(

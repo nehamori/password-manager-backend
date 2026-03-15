@@ -14,6 +14,8 @@ type DiscordLoginRequest = {
 
 type User = {
     id: number;
+    username: string;
+    avatarUrl: string | null;
 }
 
 type LoginChallenge = {
@@ -29,5 +31,5 @@ type LoginResponse = {
 }
 
 type LoginCompleteResponse = {
-    ok: boolean;
+    user: User;
 }

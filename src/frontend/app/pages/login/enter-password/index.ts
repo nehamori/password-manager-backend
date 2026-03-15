@@ -32,7 +32,6 @@ export class EnterPassword implements OnInit {
 
         try {
             await this.loginFsm.completeLogin(this.password());
-            this.router.navigate(['/']);
         } catch (e) {
             this.error.set(e instanceof Error ? e.message : 'Failed to complete login. Please try again.');
         } finally {

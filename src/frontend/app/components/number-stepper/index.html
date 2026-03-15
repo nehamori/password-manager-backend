@@ -1,0 +1,27 @@
+<div
+    class="flex items-center rounded-xl border border-gray-800 bg-gray-950 overflow-hidden">
+    <button
+        type="button"
+        (click)="decrement()"
+        [disabled]="disabled || value <= min"
+        class="h-11 w-11 shrink-0 border-r border-gray-800 text-gray-300 hover:bg-gray-900 hover:text-white transition disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-gray-300">
+        -
+    </button>
+
+    <input
+        type="number"
+        [value]="value"
+        [min]="min"
+        [max]="max"
+        [disabled]="disabled"
+        (input)="onInput($event)"
+        class="w-full min-w-0 appearance-none bg-transparent px-3 py-2.5 text-center text-sm text-gray-100 focus:outline-none disabled:opacity-40 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none" />
+
+    <button
+        type="button"
+        (click)="increment()"
+        [disabled]="disabled || value >= max"
+        class="h-11 w-11 shrink-0 border-l border-gray-800 text-gray-300 hover:bg-gray-900 hover:text-white transition disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-gray-300">
+        +
+    </button>
+</div>
