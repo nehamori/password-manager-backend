@@ -1,6 +1,9 @@
 #!/bin/sh
 set -e
 
+echo "Injecting Doppler secrets into environment variables..."
+source <(doppler secrets download --no-file --format env)
+
 echo "Applying Alembic migrations..."
 alembic -c /app/alembic.ini upgrade head
 
