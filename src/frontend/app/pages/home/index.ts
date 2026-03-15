@@ -1,14 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject, computed } from '@angular/core';
+import { ApiClient } from '../../services/api';
+import { UserService } from '../../services/user';
 
 @Component({
   selector: 'app-landing',
   templateUrl: './index.html'
 })
 export class Home implements OnInit {
+  private api = inject(ApiClient);
+  private userService = inject(UserService);
+
+  isLoggedIn = computed(() => this.userService.currentUser() !== null);
+
   platform = 'your device';
   downloadUrl = '#';
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    if (!this.userService.currentUser()) {
+      try {
+        const user = await this.api.getMe();
+        this.userService.setUser(user);
+      } catch { /* not logged in */ }
+    }
     const ua = navigator.userAgent.toLowerCase();
 
     if (ua.includes('android')) {

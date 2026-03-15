@@ -13,7 +13,7 @@ const homeRoutes: Routes = !environment.isElectron
     : [];
 
 const electronRootRoutes: Routes = environment.isElectron
-    ? [{ path: '', redirectTo: 'login', pathMatch: 'full' as const }]
+    ? [{ path: '', redirectTo: 'dashboard', pathMatch: 'full' as const }]
     : [];
 
 export const routes: Routes = [
@@ -33,5 +33,5 @@ export const routes: Routes = [
             { path: 'settings', component: SettingsPage },
         ],
     },
-    { path: '**', redirectTo: environment.isElectron ? 'login' : '' },
+    { path: '**', redirectTo: environment.isElectron ? 'dashboard' : '' },
 ];

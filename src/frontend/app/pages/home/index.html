@@ -8,11 +8,19 @@
             BlinkPass
         </div>
         <div class="hidden md:flex gap-8 text-gray-400 text-sm">
-            <a
-                href="/login"
-                class="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-lg text-white font-semibold transition">
-                Login
-            </a>
+            @if (isLoggedIn()) {
+                <a
+                    href="/dashboard"
+                    class="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-lg text-white font-semibold transition">
+                    Dashboard
+                </a>
+            } @else {
+                <a
+                    href="/login"
+                    class="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-lg text-white font-semibold transition">
+                    Login
+                </a>
+            }
         </div>
     </nav>
     <!-- HERO -->
