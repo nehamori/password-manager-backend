@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, Menu } = require('electron');
 const path = require('path');
 
 let mainWindow = null;
@@ -50,12 +50,15 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1200,
         height: 800,
+        autoHideMenuBar: true,
         webPreferences: {
             contextIsolation: true,
             nodeIntegration: false,
             preload: path.join(__dirname, 'preload.js'),
         },
     });
+
+    mainWindow.setMenuBarVisibility(false);
 
     mainWindow.loadFile(
         path.join(__dirname, '..', 'dist', 'BlinkPassFront', 'browser', 'index.html')
@@ -89,6 +92,7 @@ if (gotSingleInstanceLock) {
     });
 
     app.whenReady().then(() => {
+        Menu.setApplicationMenu(null);
         registerProtocolClient();
         createWindow();
     });
