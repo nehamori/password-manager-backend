@@ -59,7 +59,9 @@ jobs:
               if: matrix.os == 'ubuntu-latest'
               uses: softprops/action-gh-release@v2
               with:
-                  files: dist/electron/*.AppImage
+                files: |
+                  dist/electron/*.AppImage
+                  dist/electron/*.deb
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
