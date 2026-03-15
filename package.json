@@ -48,6 +48,14 @@
   "build": {
     "appId": "app.blinkpass",
     "productName": "BlinkPass",
+    "protocols": [
+      {
+        "name": "BlinkPass Login Protocol",
+        "schemes": [
+          "blinkpass"
+        ]
+      }
+    ],
     "directories": {
       "output": "dist/electron"
     },
@@ -65,7 +73,10 @@
       "artifactName": "BlinkPass-${env.RELEASE_VERSION}-macos.${ext}"
     },
     "linux": {
-      "target": "AppImage",
+      "target": [
+        "AppImage",
+        "deb"
+      ],
       "artifactName": "BlinkPass-${env.RELEASE_VERSION}-linux.${ext}"
     },
     "publish": {
