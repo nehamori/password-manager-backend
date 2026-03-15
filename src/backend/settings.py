@@ -7,3 +7,6 @@ class Settings(BaseSettings):
 
     DATABASE_URL: str
     TELEGRAM_BOT_TOKEN: str
+    SECRET_KEY: str
+    DISCORD_APP_ID: str
+    DISCORD_SECRET_TOKEN: str

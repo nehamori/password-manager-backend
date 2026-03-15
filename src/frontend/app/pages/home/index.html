@@ -1,2 +1,157 @@
-<p>home works!</p>
-<a routerLink="/login">Go to Login</a>
+<div class="min-h-screen bg-gray-950 text-white flex flex-col">
+    <!-- NAVBAR -->
+    <nav
+        class="max-w-7xl mx-auto w-full px-6 py-6 flex justify-between items-center">
+        <div class="flex items-center gap-3 font-semibold text-lg">
+            <img src="/favicon.jpg" alt="BlinkPass logo"
+                class="w-8 h-8 object-contain">
+            BlinkPass
+        </div>
+        <div class="hidden md:flex gap-8 text-gray-400 text-sm">
+            <a
+                href="/login"
+                class="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-lg text-white font-semibold transition">
+                Login
+            </a>
+        </div>
+    </nav>
+    <!-- HERO -->
+    <section class="max-w-7xl mx-auto px-6 py-28 text-center">
+        <h1 class="text-5xl md:text-6xl font-bold leading-tight mb-6">
+            Password manager that<br>
+            <span class="text-indigo-400">never sees your secrets</span>
+        </h1>
+        <p class="text-gray-400 text-lg max-w-2xl mx-auto mb-12">
+            BlinkPass encrypts everything locally before it leaves your device.
+            Passwords, SSH keys, API tokens and personal secrets stay private —
+            even from the server.
+        </p>
+        <a
+            [href]="downloadUrl"
+            class="inline-block bg-indigo-600 hover:bg-indigo-500 px-8 py-4 rounded-xl text-lg font-semibold transition">
+            Download for {{platform}}
+        </a>
+        <div class="mt-6 text-sm text-gray-500">
+            <a
+                href="/releases"
+                class="hover:text-gray-300 underline">
+                See releases for other platforms
+            </a>
+        </div>
+    </section>
+    <!-- FEATURES -->
+    <section class="max-w-7xl mx-auto px-6 py-24 grid md:grid-cols-3 gap-10">
+        <div class="bg-gray-900 p-8 rounded-xl border border-gray-800">
+            <h3 class="font-semibold text-lg mb-3">
+                Client-side encryption
+            </h3>
+            <p class="text-gray-400 text-sm">
+                All secrets are encrypted in your browser before syncing.
+                The server only stores encrypted data.
+            </p>
+        </div>
+        <div class="bg-gray-900 p-8 rounded-xl border border-gray-800">
+            <h3 class="font-semibold text-lg mb-3">
+                Custom secret types
+            </h3>
+            <p class="text-gray-400 text-sm">
+                Define your own schemas for secrets —
+                passwords, SSH keys, API tokens or documents.
+            </p>
+        </div>
+        <div class="bg-gray-900 p-8 rounded-xl border border-gray-800">
+            <h3 class="font-semibold text-lg mb-3">
+                Secure organizations
+            </h3>
+            <p class="text-gray-400 text-sm">
+                Share secrets safely with your team inside
+                encrypted organization spaces.
+            </p>
+        </div>
+    </section>
+    <!-- SECRET TYPES -->
+    <section class="max-w-7xl mx-auto px-6 py-24">
+        <h2 class="text-3xl font-bold text-center mb-14">
+            Store any type of secret
+        </h2>
+        <div class="grid md:grid-cols-4 gap-6">
+            <div class="bg-gray-900 border border-gray-800 p-6 rounded-xl">
+                <h4 class="font-semibold mb-2">Website password</h4>
+                <p class="text-gray-400 text-sm">login, password, url</p>
+            </div>
+            <div class="bg-gray-900 border border-gray-800 p-6 rounded-xl">
+                <h4 class="font-semibold mb-2">SSH keys</h4>
+                <p class="text-gray-400 text-sm">private and public keys</p>
+            </div>
+            <div class="bg-gray-900 border border-gray-800 p-6 rounded-xl">
+                <h4 class="font-semibold mb-2">API tokens</h4>
+                <p class="text-gray-400 text-sm">tokens and secrets</p>
+            </div>
+            <div class="bg-gray-900 border border-gray-800 p-6 rounded-xl">
+                <h4 class="font-semibold mb-2">Personal data</h4>
+                <p class="text-gray-400 text-sm">documents and IDs</p>
+            </div>
+        </div>
+    </section>
+    <!-- ORGANIZATIONS -->
+    <section class="max-w-7xl mx-auto px-6 py-24 text-center">
+        <h2 class="text-3xl font-bold mb-6">
+            Built for teams
+        </h2>
+        <p class="text-gray-400 max-w-2xl mx-auto mb-12">
+            Create organizations to securely share secrets
+            between developers, teams or entire companies.
+        </p>
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="bg-gray-900 border border-gray-800 p-6 rounded-xl">
+                Role based access
+            </div>
+            <div class="bg-gray-900 border border-gray-800 p-6 rounded-xl">
+                Encrypted shared vaults
+            </div>
+            <div class="bg-gray-900 border border-gray-800 p-6 rounded-xl">
+                Audit and control
+            </div>
+        </div>
+    </section>
+    <!-- SECURITY -->
+    <section class="max-w-7xl mx-auto px-6 py-24 text-center">
+        <h2 class="text-3xl font-bold mb-6">
+            Zero-knowledge architecture
+        </h2>
+        <p class="text-gray-400 max-w-2xl mx-auto">
+            Your master key never leaves your device.
+            Encryption and decryption happen entirely on the client.
+        </p>
+    </section>
+    <!-- CTA -->
+    <section class="py-28 bg-gray-900 border-t border-gray-800 text-center">
+        <h2 class="text-3xl font-bold mb-8">
+            Start protecting your secrets today
+        </h2>
+        <a
+            [href]="downloadUrl"
+            class="bg-indigo-600 hover:bg-indigo-500 px-8 py-4 rounded-xl font-semibold text-lg">
+            Download for {{platform}}
+        </a>
+        <div class="mt-6 text-sm text-gray-500">
+            <a
+                href="/releases"
+                class="hover:text-gray-300 underline">
+                View all releases
+            </a>
+        </div>
+    </section>
+    <!-- FOOTER -->
+    <footer class="mt-auto border-t border-gray-800">
+        <div
+            class="max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row justify-between text-sm text-gray-500">
+            <div>
+                © 2026 BlinkPass
+            </div>
+            <div>
+                End-to-end encrypted password manager
+            </div>
+        </div>
+    </footer>
+</div>

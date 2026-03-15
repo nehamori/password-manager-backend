@@ -3,7 +3,7 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 
-export const TELEGRAM_BOT_NAME = 'BlinkPassBot';
+export const BASE_API_URL = 'api/';
 
 export const appConfig: ApplicationConfig = {
   providers: [

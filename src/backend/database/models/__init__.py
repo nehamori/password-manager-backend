@@ -1,4 +1,10 @@
-from .users import UserOrm, EmailUserOrm, TelegramUserOrm, DiscordUserOrm
+from .users import (
+    UserOrm,
+    EmailUserOrm,
+    TelegramUserOrm,
+    DiscordUserOrm,
+    UserLoginTokenOrm,
+)
 
 
 __all__ = [
@@ -6,4 +12,5 @@ __all__ = [
     "EmailUserOrm",
     "TelegramUserOrm",
     "DiscordUserOrm",
+    "UserLoginTokenOrm",
 ]

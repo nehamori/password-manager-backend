@@ -1,0 +1,21 @@
+<div
+    class="min-h-screen bg-gray-950 text-white flex items-center justify-center px-6">
+    <div
+        class="w-full max-w-lg rounded-2xl border border-gray-800 bg-gray-900 p-8 text-center shadow-xl shadow-black/20">
+        <div
+            class="inline-flex items-center gap-2 rounded-full border border-gray-800 bg-gray-950 px-4 py-2 text-sm text-gray-300 mb-6">
+            Discord authorization
+        </div>
+        <h1 class="text-3xl font-bold mb-4">Completing secure sign in</h1>
+        <p class="leading-7" [class.text-gray-400]="!hasError()"
+            [class.text-red-400]="hasError()">
+            {{ statusMessage() }}
+        </p>
+        <a
+            class="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-lg text-white font-semibold transition mt-4 inline-block"
+            [class.hidden]="!processFinished()"
+            routerLink="/login">
+            Back to Home
+        </a>
+    </div>
+</div>

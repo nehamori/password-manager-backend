@@ -22,6 +22,9 @@
                     "options": {
                         "browser": "src/frontend/main.ts",
                         "tsConfig": "tsconfig.app.json",
+                        "allowedCommonJsDependencies": [
+                            "argon2-browser/dist/argon2-bundled.min.js"
+                        ],
                         "inlineStyleLanguage": "scss",
                         "assets": [
                             {
@@ -69,6 +72,7 @@
                     },
                     "defaultConfiguration": "development",
                     "options": {
+                        "proxyConfig": "proxy.conf.json",
                         "allowedHosts": ["acerb-nonmicroscopic-abraham.ngrok-free.dev"]
                     }
                 },
