@@ -81,7 +81,8 @@
       "maintainer": "BlinkPass Team <support@blinkpass.app>",
       "target": [
         "AppImage",
-        "deb"
+        "deb",
+        "pacman"
       ],
       "artifactName": "BlinkPass-${env.RELEASE_VERSION}-linux.${ext}"
     },
