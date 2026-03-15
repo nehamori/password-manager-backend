@@ -1,6 +1,11 @@
 {
   "name": "blink-pass-front",
+  "description": "BlinkPass frontend and desktop client",
   "version": "0.0.0",
+  "author": {
+    "name": "BlinkPass Team",
+    "email": "support@blinkpass.app"
+  },
   "main": "electron/main.js",
   "scripts": {
     "ng": "ng",
@@ -73,6 +78,7 @@
       "artifactName": "BlinkPass-${env.RELEASE_VERSION}-macos.${ext}"
     },
     "linux": {
+      "maintainer": "BlinkPass Team <support@blinkpass.app>",
       "target": [
         "AppImage",
         "deb"
