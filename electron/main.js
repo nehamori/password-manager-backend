@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, shell } = require('electron');
 const path = require('path');
 
 let mainWindow = null;
@@ -82,6 +82,10 @@ if (gotSingleInstanceLock) {
         const protocolUrl = pendingProtocolUrl;
         pendingProtocolUrl = null;
         return protocolUrl;
+    });
+
+    ipcMain.handle('blinkpass:open-external', (_event, url) => {
+        return shell.openExternal(url);
     });
 
     app.whenReady().then(() => {
