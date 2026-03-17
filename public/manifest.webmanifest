@@ -1,6 +1,6 @@
 {
-    "name": "BlinkPassFront",
-    "short_name": "BlinkPassFront",
+    "name": "BlinkPass",
+    "short_name": "BlinkPass",
     "display": "standalone",
     "scope": "./",
     "start_url": "./",
