@@ -33,6 +33,12 @@ jobs:
             - name: Install dependencies
               run: npm ci
 
+            - name: Inject GitHub repository into frontend environment
+              env:
+                  GH_REPOSITORY: ${{ github.repository }}
+              run: |
+                  node -e "const fs=require('fs'); const files=['src/frontend/environments/environment.ts','src/frontend/environments/environment.prod.ts','src/frontend/environments/environment.electron.ts']; for (const file of files) { const source=fs.readFileSync(file,'utf8'); fs.writeFileSync(file, source.replace(/__GITHUB_REPOSITORY__/g, process.env.GH_REPOSITORY)); }"
+
             - name: Build Angular app
               run: npm run build
 
