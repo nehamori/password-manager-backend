@@ -27,7 +27,7 @@ export class Home implements OnInit {
     }
 
     const repository = this.resolveGithubRepository();
-    this.releasesUrl = `https://github.com/${repository}/releases`;
+    this.releasesUrl = `https://github.com/${repository}/releases/latest`;
     this.downloadUrl = this.releasesUrl;
 
     const ua = navigator.userAgent.toLowerCase();
