@@ -39,7 +39,8 @@ export class ApiClient {
     loginComplete(loginToken: string, payload: { challengeProof?: string; verifier?: string }) {
         return firstValueFrom(this.http.post<LoginCompleteResponse>(
             environment.baseApiUrl + 'auth/login/complete',
-            { loginToken, ...payload }
+            { loginToken, ...payload },
+            { withCredentials: true }
         ));
     }
 
