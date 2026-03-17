@@ -11,12 +11,14 @@ export class Home implements OnInit {
   private api = inject(ApiClient);
   private userService = inject(UserService);
   private readonly defaultRepository = 'nekit/password-manager-backend';
+  private readonly iosInstallPromptDismissedKey = 'blinkpass.iosInstallPrompt.dismissed';
 
   isLoggedIn = computed(() => this.userService.currentUser() !== null);
 
   platform = 'your device';
   downloadUrl = '';
   releasesUrl = '';
+  showIosInstallPrompt = false;
 
   async ngOnInit(): Promise<void> {
     if (!this.userService.currentUser()) {
@@ -29,6 +31,7 @@ export class Home implements OnInit {
     const repository = this.resolveGithubRepository();
     this.releasesUrl = `https://github.com/${repository}/releases/latest`;
     this.downloadUrl = this.releasesUrl;
+    this.showIosInstallPrompt = this.shouldShowIosInstallPrompt();
 
     const platform = this.detectPlatform();
 
@@ -98,5 +101,50 @@ export class Home implements OnInit {
 
   private getLatestAssetUrl(repository: string, assetName: string): string {
     return `https://github.com/${repository}/releases/latest/download/${assetName}`;
+  }
+
+  dismissIosInstallPrompt(): void {
+    this.showIosInstallPrompt = false;
+
+    try {
+      localStorage.setItem(this.iosInstallPromptDismissedKey, '1');
+    } catch {
+      // Ignore storage errors (private mode / storage restrictions).
+    }
+  }
+
+  private shouldShowIosInstallPrompt(): boolean {
+    if (!this.isIphoneSafari()) {
+      return false;
+    }
+
+    if (this.isStandaloneMode()) {
+      return false;
+    }
+
+    try {
+      return localStorage.getItem(this.iosInstallPromptDismissedKey) !== '1';
+    } catch {
+      return true;
+    }
+  }
+
+  private isIphoneSafari(): boolean {
+    const ua = navigator.userAgent.toLowerCase();
+
+    const isIphone = ua.includes('iphone');
+    const isSafari = ua.includes('safari')
+      && !ua.includes('crios')
+      && !ua.includes('fxios')
+      && !ua.includes('edgios')
+      && !ua.includes('opios');
+
+    return isIphone && isSafari;
+  }
+
+  private isStandaloneMode(): boolean {
+    const iosNavigator = navigator as Navigator & { standalone?: boolean };
+
+    return window.matchMedia('(display-mode: standalone)').matches || iosNavigator.standalone === true;
   }
 }

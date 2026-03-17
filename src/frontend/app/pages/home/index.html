@@ -23,6 +23,25 @@
             }
         </div>
     </nav>
+
+    @if (showIosInstallPrompt) {
+        <section class="max-w-3xl mx-auto w-full px-6 pb-2">
+            <div class="relative rounded-2xl border border-indigo-500/40 bg-indigo-500/10 px-5 py-4 text-left">
+                <button
+                    type="button"
+                    (click)="dismissIosInstallPrompt()"
+                    class="absolute right-3 top-3 text-gray-300 hover:text-white transition"
+                    aria-label="Close install tip">
+                    ✕
+                </button>
+                <p class="text-sm md:text-base text-indigo-100 pr-8">
+                    Install BlinkPass on iPhone: tap <span class="font-semibold">Share</span>
+                    in Safari, then choose <span class="font-semibold">Add to Home Screen</span>.
+                </p>
+            </div>
+        </section>
+    }
+
     <!-- HERO -->
     <section class="max-w-7xl mx-auto px-6 py-28 text-center">
         <h1 class="text-5xl md:text-6xl font-bold leading-tight mb-6">

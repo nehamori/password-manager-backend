@@ -1,105 +1,106 @@
 {
-  "name": "blink-pass-front",
-  "description": "BlinkPass frontend and desktop client",
-  "version": "0.0.0",
-  "author": {
-    "name": "BlinkPass Team",
-    "email": "support@blinkpass.app"
-  },
-  "main": "electron/main.js",
-  "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "build:electron": "ng build --configuration=electron",
-    "electron:start": "npm run build:electron && electron .",
-    "electron:dist": "npm run build:electron && electron-builder",
-    "build:android": "ng build --configuration=electron"
-  },
-  "private": true,
-  "packageManager": "npm@11.11.0",
-  "dependencies": {
-    "@angular/common": "^21.2.0",
-    "@angular/compiler": "^21.2.0",
-    "@angular/core": "^21.2.0",
-    "@angular/forms": "^21.2.0",
-    "@angular/platform-browser": "^21.2.0",
-    "@angular/router": "^21.2.0",
-    "@capacitor/android": "^7.0.0",
-    "@capacitor/app": "^7.1.2",
-    "@capacitor/core": "^7.0.0",
-    "argon2-browser": "^1.18.0",
-    "rxjs": "~7.8.0",
-    "tslib": "^2.3.0"
-  },
-  "devDependencies": {
-    "@angular/build": "^21.2.1",
-    "@angular/cli": "^21.2.1",
-    "@angular/compiler-cli": "^21.2.0",
-    "@capacitor/cli": "^7.0.0",
-    "@tailwindcss/postcss": "^4.2.1",
-    "@types/argon2-browser": "^1.18.4",
-    "autoprefixer": "^10.4.27",
-    "electron": "^34.0.0",
-    "electron-builder": "^25.0.0",
-    "jsdom": "^28.0.0",
-    "postcss": "^8.5.8",
-    "prettier": "^3.8.1",
-    "tailwindcss": "^3.3.4",
-    "typescript": "~5.9.2",
-    "vitest": "^4.0.8"
-  },
-  "build": {
-    "appId": "app.blinkpass",
-    "productName": "BlinkPass",
-    "protocols": [
-      {
-        "name": "BlinkPass Login Protocol",
-        "schemes": [
-          "blinkpass"
-        ]
-      }
-    ],
-    "directories": {
-      "output": "dist/electron"
+    "name": "blink-pass-front",
+    "description": "BlinkPass frontend and desktop client",
+    "version": "0.0.0",
+    "author": {
+        "name": "BlinkPass Team",
+        "email": "support@blinkpass.app"
     },
-    "files": [
-      "electron/**/*",
-      "dist/BlinkPassFront/browser/**/*",
-      "package.json"
-    ],
-    "win": {
-      "target": "nsis",
-      "artifactName": "BlinkPass-${env.RELEASE_VERSION}-windows.${ext}"
+    "main": "electron/main.js",
+    "scripts": {
+        "ng": "ng",
+        "start": "ng serve",
+        "build": "ng build",
+        "watch": "ng build --watch --configuration development",
+        "test": "ng test",
+        "build:electron": "ng build --configuration=electron",
+        "electron:start": "npm run build:electron && electron .",
+        "electron:dist": "npm run build:electron && electron-builder",
+        "build:android": "ng build --configuration=electron"
     },
-    "mac": {
-      "target": "dmg",
-      "artifactName": "BlinkPass-${env.RELEASE_VERSION}-macos.${ext}"
+    "private": true,
+    "packageManager": "npm@11.11.0",
+    "dependencies": {
+        "@angular/common": "^21.2.0",
+        "@angular/compiler": "^21.2.0",
+        "@angular/core": "^21.2.0",
+        "@angular/forms": "^21.2.0",
+        "@angular/platform-browser": "^21.2.0",
+        "@angular/router": "^21.2.0",
+        "@angular/service-worker": "^21.2.0",
+        "@capacitor/android": "^7.0.0",
+        "@capacitor/app": "^7.1.2",
+        "@capacitor/core": "^7.0.0",
+        "argon2-browser": "^1.18.0",
+        "rxjs": "~7.8.0",
+        "tslib": "^2.3.0"
     },
-    "linux": {
-      "maintainer": "BlinkPass Team <support@blinkpass.app>",
-      "category": "Utility",
-      "target": [
-        "AppImage",
-        "deb",
-        "pacman"
-      ],
-      "artifactName": "BlinkPass-${env.RELEASE_VERSION}-linux.${ext}"
+    "devDependencies": {
+        "@angular/build": "^21.2.1",
+        "@angular/cli": "^21.2.1",
+        "@angular/compiler-cli": "^21.2.0",
+        "@capacitor/cli": "^7.0.0",
+        "@tailwindcss/postcss": "^4.2.1",
+        "@types/argon2-browser": "^1.18.4",
+        "autoprefixer": "^10.4.27",
+        "electron": "^34.0.0",
+        "electron-builder": "^25.0.0",
+        "jsdom": "^28.0.0",
+        "postcss": "^8.5.8",
+        "prettier": "^3.8.1",
+        "tailwindcss": "^3.3.4",
+        "typescript": "~5.9.2",
+        "vitest": "^4.0.8"
     },
-    "pacman": {
-      "depends": [
-        "gtk3",
-        "nss",
-        "libxss",
-        "libxtst",
-        "libnotify",
-        "xdg-utils"
-      ]
-    },
-    "publish": {
-      "provider": "github"
+    "build": {
+        "appId": "app.blinkpass",
+        "productName": "BlinkPass",
+        "protocols": [
+            {
+                "name": "BlinkPass Login Protocol",
+                "schemes": [
+                    "blinkpass"
+                ]
+            }
+        ],
+        "directories": {
+            "output": "dist/electron"
+        },
+        "files": [
+            "electron/**/*",
+            "dist/BlinkPassFront/browser/**/*",
+            "package.json"
+        ],
+        "win": {
+            "target": "nsis",
+            "artifactName": "BlinkPass-${env.RELEASE_VERSION}-windows.${ext}"
+        },
+        "mac": {
+            "target": "dmg",
+            "artifactName": "BlinkPass-${env.RELEASE_VERSION}-macos.${ext}"
+        },
+        "linux": {
+            "maintainer": "BlinkPass Team <support@blinkpass.app>",
+            "category": "Utility",
+            "target": [
+                "AppImage",
+                "deb",
+                "pacman"
+            ],
+            "artifactName": "BlinkPass-${env.RELEASE_VERSION}-linux.${ext}"
+        },
+        "pacman": {
+            "depends": [
+                "gtk3",
+                "nss",
+                "libxss",
+                "libxtst",
+                "libnotify",
+                "xdg-utils"
+            ]
+        },
+        "publish": {
+            "provider": "github"
+        }
     }
-  }
 }
