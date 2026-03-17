@@ -7,3 +7,15 @@
   margin: 0;
   padding: 0;
 }
+
+/* Keep app content below status bar / notch on devices with a top cutout. */
+app-root,
+app-root > .main {
+  display: block;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+app-root > .main {
+  padding-top: env(safe-area-inset-top, 0px);
+}
