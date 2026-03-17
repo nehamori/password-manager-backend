@@ -1,7 +1,7 @@
-import { Component, OnInit, inject, computed } from '@angular/core';
+import { Component, OnInit, computed, inject } from '@angular/core';
+import { environment } from '../../../environments/environment';
 import { ApiClient } from '../../services/api';
 import { UserService } from '../../services/user';
-import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-landing',
@@ -30,27 +30,60 @@ export class Home implements OnInit {
     this.releasesUrl = `https://github.com/${repository}/releases/latest`;
     this.downloadUrl = this.releasesUrl;
 
-    const ua = navigator.userAgent.toLowerCase();
+    const platform = this.detectPlatform();
 
-    if (ua.includes('android')) {
+    if (platform === 'android') {
       this.platform = 'Android';
       this.downloadUrl = this.getLatestAssetUrl(repository, 'BlinkPass-android.apk');
     }
 
-    else if (ua.includes('win')) {
+    else if (platform === 'windows') {
       this.platform = 'Windows';
       this.downloadUrl = this.getLatestAssetUrl(repository, 'BlinkPass-windows.exe');
     }
 
-    else if (ua.includes('mac')) {
+    else if (platform === 'macos') {
       this.platform = 'macOS';
       this.downloadUrl = this.getLatestAssetUrl(repository, 'BlinkPass-macos.dmg');
     }
 
-    else if (ua.includes('linux')) {
+    else if (platform === 'linux') {
       this.platform = 'Linux';
       this.downloadUrl = this.getLatestAssetUrl(repository, 'BlinkPass-linux.AppImage');
     }
+  }
+
+  private detectPlatform(): 'android' | 'windows' | 'macos' | 'linux' | 'unknown' {
+    const ua = navigator.userAgent.toLowerCase();
+    const platform = (navigator.platform ?? '').toLowerCase();
+    const uaDataPlatform = (navigator as Navigator & { userAgentData?: { platform?: string } })
+      .userAgentData?.platform?.toLowerCase() ?? '';
+
+    if (ua.includes('android') || platform.includes('android') || uaDataPlatform.includes('android')) {
+      return 'android';
+    }
+
+    if (ua.includes('windows') || platform.includes('win') || uaDataPlatform.includes('windows')) {
+      return 'windows';
+    }
+
+    if (ua.includes('mac os') || ua.includes('macintosh') || platform.includes('mac') || uaDataPlatform.includes('mac')) {
+      return 'macos';
+    }
+
+    // Some Android browsers strip the "android" token but keep Linux + mobile markers.
+    const looksLikeMobileLinux = (ua.includes('linux') || platform.includes('linux') || uaDataPlatform.includes('linux'))
+      && (ua.includes('mobile') || ua.includes('wv') || ua.includes('okhttp'));
+
+    if (looksLikeMobileLinux) {
+      return 'android';
+    }
+
+    if (ua.includes('linux') || platform.includes('linux') || uaDataPlatform.includes('linux')) {
+      return 'linux';
+    }
+
+    return 'unknown';
   }
 
   private resolveGithubRepository(): string {
