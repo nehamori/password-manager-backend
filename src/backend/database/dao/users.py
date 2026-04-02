@@ -1,10 +1,17 @@
 from aiogram.utils.web_app import WebAppUser as TelegramUser
+from datetime import datetime
 from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from utils.discord import UserInfo
 
-from database.models import TelegramUserOrm, DiscordUserOrm, UserOrm, UserLoginTokenOrm
+from database.models import (
+    TelegramUserOrm,
+    DiscordUserOrm,
+    UserOrm,
+    UserLoginTokenOrm,
+    UserDeviceResumeTokenOrm,
+)
 
 
 class UsersDAO:
@@ -56,9 +63,7 @@ class UsersDAO:
         telegram_user = telegram_user_result.scalar()
         if not telegram_user:
             if assign_to_user_id is None:
-                telegram_full_name = (
-                    f"{user.first_name} {user.last_name or ''}".strip()
-                )
+                telegram_full_name = f"{user.first_name} {user.last_name or ''}".strip()
                 user_orm = UserOrm(
                     account_verified=True,
                     salt=random_salt,
@@ -95,4 +100,40 @@ class UsersDAO:
     async def delete_login_token(self, token: str) -> None:
         await self.session.execute(
             delete(UserLoginTokenOrm).where(UserLoginTokenOrm.token == token)
+        )
+
+    async def create_device_resume_token(
+        self, user_id: int, token: str, expires_at: datetime
+    ) -> UserDeviceResumeTokenOrm:
+        resume_token = UserDeviceResumeTokenOrm(
+            user_id=user_id,
+            token=token,
+            expires_at=expires_at,
+        )
+        self.session.add(resume_token)
+        await self.session.flush([resume_token])
+        return resume_token
+
+    async def get_device_resume_token(
+        self, token: str
+    ) -> UserDeviceResumeTokenOrm | None:
+        result = await self.session.execute(
+            select(UserDeviceResumeTokenOrm).where(
+                UserDeviceResumeTokenOrm.token == token
+            )
+        )
+        return result.scalar_one_or_none()
+
+    async def delete_device_resume_token(self, token: str) -> None:
+        await self.session.execute(
+            delete(UserDeviceResumeTokenOrm).where(
+                UserDeviceResumeTokenOrm.token == token
+            )
+        )
+
+    async def delete_expired_device_resume_tokens(self, now: datetime) -> None:
+        await self.session.execute(
+            delete(UserDeviceResumeTokenOrm).where(
+                UserDeviceResumeTokenOrm.expires_at < now
+            )
         )

@@ -1,4 +1,4 @@
-<div class="p-6 md:p-8 max-w-3xl">
+<section class="mx-auto max-w-4xl p-4 md:p-6">
     <h1 class="text-2xl font-bold text-white mb-6">Password Generator</h1>
 
     <div
@@ -26,7 +26,8 @@
                 </button>
             </div>
             @if (copyStatus() === 'copied') {
-            <p class="text-emerald-400 text-sm mt-2">Copied to clipboard.</p>
+            <p class="text-emerald-400 text-sm mt-2">Copied to
+                clipboard.</p>
             }
             @if (copyStatus() === 'error') {
             <p class="text-red-400 text-sm mt-2">Could not copy
@@ -37,7 +38,8 @@
         <div>
             <div class="flex items-center justify-between mb-2">
                 <label class="text-sm text-gray-300">Length</label>
-                <span class="text-sm text-indigo-300 font-semibold">{{ length()
+                <span class="text-sm text-indigo-300 font-semibold">{{
+                    length()
                     }}</span>
             </div>
             <div class="flex items-center gap-3 mb-3">
@@ -128,4 +130,4 @@
         </div>
 
     </div>
-</div>
+</section>

@@ -1,0 +1,438 @@
+.data-types-container {
+    padding: 2rem;
+    height: 100%;
+    overflow: hidden;
+}
+
+.data-types-wrapper {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 2rem;
+    height: 100%;
+
+    @media (max-width: 1024px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+// ============= Left Panel =============
+.data-types-list-panel {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #333;
+    border-radius: 12px;
+    padding: 1.5rem;
+    background: rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.panel-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid #555;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+
+    &:focus {
+        outline: none;
+        border-color: #88f;
+        background: rgba(136, 136, 255, 0.1);
+    }
+
+    &::placeholder {
+        color: #999;
+    }
+}
+
+.types-list {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #555;
+        border-radius: 2px;
+
+        &:hover {
+            background: #777;
+        }
+    }
+}
+
+.type-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border: 1px solid #555;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.02);
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: #777;
+    }
+
+    &.active {
+        background: rgba(136, 136, 255, 0.15);
+        border-color: #88f;
+    }
+}
+
+.type-name {
+    color: #fff;
+    font-weight: 500;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.type-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-left: 0.5rem;
+}
+
+.btn-icon {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: #aaa;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+        color: #fff;
+    }
+
+    &.btn-danger:hover {
+        color: #ff6b6b;
+    }
+}
+
+.icon {
+    width: 16px;
+    height: 16px;
+}
+
+.list-footer {
+    display: flex;
+    justify-content: center;
+    padding-top: 1rem;
+    border-top: 1px solid #555;
+}
+
+.btn-add {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #555;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+    color: #aaa;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+        border-color: #88f;
+        color: #88f;
+        background: rgba(136, 136, 255, 0.1);
+    }
+}
+
+// ============= Right Panel =============
+.edit-panel {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #333;
+    border-radius: 12px;
+    padding: 1.5rem;
+    background: rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #555;
+        border-radius: 2px;
+
+        &:hover {
+            background: #777;
+        }
+    }
+}
+
+.panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.btn-save {
+    padding: 0.5rem 1.25rem;
+    border: 1px solid #88f;
+    border-radius: 4px;
+    background: transparent;
+    color: #88f;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+
+    &:hover:not(:disabled) {
+        background: rgba(136, 136, 255, 0.15);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+
+    label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #ccc;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+}
+
+.form-input,
+.field-name-input,
+.field-type-select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #555;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+
+    &:focus {
+        outline: none;
+        border-color: #88f;
+        box-shadow: 0 0 8px rgba(136, 136, 255, 0.2);
+    }
+
+    &::placeholder {
+        color: #777;
+    }
+}
+
+.form-input {
+    width: 100%;
+}
+
+// ============= Fields Section =============
+.fields-section {
+    margin: 2rem 0;
+}
+
+.section-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #ccc;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.fields-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.field-item {
+    padding: 1rem;
+    border: 1px solid #555;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.02);
+    transition: all 0.2s ease;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+}
+
+.field-inputs {
+    display: grid;
+    grid-template-columns: 1fr 150px 40px;
+    gap: 0.75rem;
+    align-items: center;
+
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.field-name-input {
+    width: 100%;
+}
+
+.field-type-select {
+    width: 100%;
+}
+
+.btn-remove-field {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #555;
+    border-radius: 4px;
+    background: transparent;
+    cursor: pointer;
+    color: #aaa;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+        background: rgba(255, 107, 107, 0.1);
+        border-color: #ff6b6b;
+        color: #ff6b6b;
+    }
+}
+
+.btn-add-field {
+    width: 40px;
+    height: 40px;
+    border: 2px dashed #555;
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    color: #aaa;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+        border-color: #88f;
+        color: #88f;
+        background: rgba(136, 136, 255, 0.1);
+    }
+}
+
+// ============= Panel Footer =============
+.panel-footer {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: auto;
+    padding-top: 1.5rem;
+    border-top: 1px solid #555;
+}
+
+.btn {
+    flex: 1;
+    padding: 0.75rem 1.25rem;
+    border-radius: 6px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.85rem;
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.btn-primary {
+    background: rgba(136, 136, 255, 0.2);
+    color: #88f;
+    border: 1px solid #88f;
+
+    &:hover:not(:disabled) {
+        background: rgba(136, 136, 255, 0.3);
+        box-shadow: 0 0 12px rgba(136, 136, 255, 0.3);
+    }
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    color: #aaa;
+    border: 1px solid #555;
+
+    &:hover:not(:disabled) {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: #888;
+    }
+}
+
+.btn-danger {
+    background: rgba(255, 107, 107, 0.15);
+    color: #ff6b6b;
+    border: 1px solid #ff6b6b;
+
+    &:hover:not(:disabled) {
+        background: rgba(255, 107, 107, 0.25);
+        box-shadow: 0 0 12px rgba(255, 107, 107, 0.3);
+    }
+}
+
+// ============= Empty State =============
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #777;
+    text-align: center;
+
+    p {
+        font-size: 0.95rem;
+        margin: 0.5rem 0;
+    }
+}

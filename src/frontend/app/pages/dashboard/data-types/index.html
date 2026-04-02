@@ -1,4 +1,63 @@
-<div class="p-6 md:p-8">
-    <h1 class="text-2xl font-bold text-white mb-6">Data Types</h1>
-    <p class="text-gray-400">Custom data type definitions will appear here.</p>
-</div>
+<section class="mx-auto max-w-4xl p-4 md:p-6">
+    <div class="mb-4 flex items-center justify-between gap-3">
+        <h1 class="text-2xl font-semibold text-zinc-100">Data Types</h1>
+        <a
+            routerLink="/dashboard/data-types/create"
+            class="inline-flex items-center rounded-lg bg-zinc-100 px-4 py-2 text-sm font-semibold text-zinc-900 transition hover:bg-white">
+            Create Type
+        </a>
+    </div>
+
+    <div
+        class="rounded-xl border border-zinc-800 bg-gray-900 p-4 shadow-lg shadow-black/20">
+        <label for="search"
+            class="mb-2 block text-xs font-medium uppercase tracking-wide text-zinc-400">Search</label>
+        <input
+            id="search"
+            type="text"
+            [ngModel]="searchQuery"
+            (ngModelChange)="onSearchChange($event)"
+            placeholder="Type title"
+            class="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 outline-none ring-zinc-300 placeholder:text-zinc-500 focus:border-zinc-500 focus:ring" />
+
+        @if (isLoading) {
+        <div class="py-8 text-center text-sm text-zinc-400">
+            Loading...
+        </div>
+        } @else {
+        <div class="mt-4 space-y-2">
+            <div
+                *ngFor="let type of filteredDataTypesList"
+                class="flex items-center justify-between rounded-lg border border-zinc-800 bg-zinc-950/60 px-3 py-2">
+                <div>
+                    <p class="text-sm font-medium text-zinc-100">{{ type.title
+                        }}</p>
+                    <p class="text-xs text-zinc-500">Fields: {{ type.fieldCount
+                        }}</p>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <a
+                        [routerLink]="['/dashboard/data-types', type.id, 'edit']"
+                        class="rounded-md border border-zinc-700 px-3 py-1.5 text-xs font-medium text-zinc-200 transition hover:border-zinc-500 hover:bg-zinc-800">
+                        Edit
+                    </a>
+                    <button
+                        type="button"
+                        (click)="deleteType(type.id)"
+                        class="rounded-md border border-red-800/80 px-3 py-1.5 text-xs font-medium text-red-300 transition hover:bg-red-900/30">
+                        Delete
+                    </button>
+                </div>
+            </div>
+
+            @if (filteredDataTypesList.length === 0) {
+            <div
+                class="rounded-lg border border-dashed border-zinc-700 p-6 text-center text-sm text-zinc-500">
+                No data types yet.
+            </div>
+            }
+        </div>
+        }
+    </div>
+</section>

@@ -2,6 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiClient } from './api';
 import { CryptoService } from './crypto';
+import { DiscordLoginRequest, LoginResponse, TelegramLoginData } from './models';
 import { UserService } from './user';
 
 @Injectable({
@@ -37,6 +38,18 @@ export class LoginFSM {
         await this.router.navigate(['/login/enter-password']);
     }
 
+    async tryResumeLogin(): Promise<boolean> {
+        try {
+            const result = await this.api.loginResume();
+            this.setupIsWebsiteLogin(true);
+            this.pendingLogin.set(result);
+            await this.router.navigate(['/login/enter-password']);
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
     async completeLogin(password: string): Promise<void> {
         const pending = this.pendingLogin();
         if (!pending) throw new Error('No pending login');
@@ -62,7 +75,7 @@ export class LoginFSM {
 
         this.encryptionKey.set(masterKey);
         this.pendingLogin.set(null);
-        
+
         this.router.navigate(['/dashboard']);
     }
 

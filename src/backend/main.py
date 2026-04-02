@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from settings import Settings
 
 from database import DatabaseConnection
-from routers import auth_router
+from routers import auth_router, data_router
 from utils import DiscordCodeManager, Cryptography, JWTManager
 
 
@@ -40,5 +40,6 @@ def app() -> FastAPI:
     app = FastAPI(lifespan=lifespan)
 
     app.include_router(auth_router)
+    app.include_router(data_router)
 
     return app

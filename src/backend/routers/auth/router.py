@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 from aiogram.types import User as BotUser
 from aiogram.utils.auth_widget import check_integrity
@@ -25,6 +25,10 @@ from .models import (
 
 
 auth_router = APIRouter(prefix="/auth", tags=["auth"])
+
+AUTH_COOKIE_NAME = "auth_token"
+DEVICE_RESUME_COOKIE_NAME = "device_resume_token"
+DEVICE_RESUME_EXPIRATION = timedelta(days=30)
 
 
 @auth_router.get("/me")
@@ -110,6 +114,35 @@ async def login_discord(
     return await login_return_challenge(user, dao, crypto)
 
 
+@auth_router.post("/login/resume")
+async def login_resume(
+    request: Request, dao: DAO = Depends(get_db_dao)
+) -> LoginResponse:
+    crypto: Cryptography = request.app.state.crypto
+
+    resume_token = request.cookies.get(DEVICE_RESUME_COOKIE_NAME)
+    if not resume_token:
+        raise HTTPException(status_code=401, detail="Trusted device session not found")
+
+    now = datetime.now(tz=timezone.utc)
+    await dao.delete_expired_device_resume_tokens(now)
+
+    resume_token_result = await dao.get_device_resume_token(resume_token)
+    if not resume_token_result:
+        raise HTTPException(status_code=401, detail="Trusted device session not found")
+
+    if resume_token_result.expires_at < now:
+        await dao.delete_device_resume_token(resume_token_result.token)
+        raise HTTPException(status_code=401, detail="Trusted device session expired")
+
+    user = await dao.get_user_by_id(resume_token_result.user_id)
+    if not user:
+        await dao.delete_device_resume_token(resume_token_result.token)
+        raise HTTPException(status_code=401, detail="Trusted device session not found")
+
+    return await login_return_challenge(user, dao, crypto)
+
+
 @auth_router.post("/login/complete", response_model=LoginCompleteResponse)
 async def login_complete(
     body: LoginCompleteRequest,
@@ -155,14 +188,28 @@ async def login_complete(
 
     await dao.delete_login_token(login_token_result.token)
 
+    now = datetime.now(tz=timezone.utc)
+    resume_token = crypto.generate_hash()
+    resume_expires_at = now + DEVICE_RESUME_EXPIRATION
+    await dao.create_device_resume_token(user.id, resume_token, resume_expires_at)
+
     jwt_token = jwt.create_token(user.id)
     response.set_cookie(
-        key="auth_token",
+        key=AUTH_COOKIE_NAME,
         value=jwt_token,
         httponly=True,
         secure=request.url.scheme == "https",
         samesite="lax",
         max_age=int(jwt.default_expiration.total_seconds()),
+        path="/",
+    )
+    response.set_cookie(
+        key=DEVICE_RESUME_COOKIE_NAME,
+        value=resume_token,
+        httponly=True,
+        secure=request.url.scheme == "https",
+        samesite="lax",
+        max_age=int(DEVICE_RESUME_EXPIRATION.total_seconds()),
         path="/",
     )
 

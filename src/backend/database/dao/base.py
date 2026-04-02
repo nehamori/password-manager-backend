@@ -3,9 +3,10 @@ from typing import Any, Sequence
 from database.connection import DatabaseConnection
 
 from .users import UsersDAO
+from .data import DataDAO
 
 
-class DAO(UsersDAO):
+class DAO(UsersDAO, DataDAO):
     def __init__(self, db_connection: DatabaseConnection):
         self.session = db_connection.session()
 

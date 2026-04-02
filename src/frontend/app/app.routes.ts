@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 import { environment } from '../environments/environment';
 import { Dashboard } from './pages/dashboard';
 import { DataTypesPage } from './pages/dashboard/data-types';
+import { DataTypeCreatePage } from './pages/dashboard/data-types/create';
+import { DataTypeEditPage } from './pages/dashboard/data-types/edit';
 import { PasswordGeneratorPage } from './pages/dashboard/password-generator';
 import { PasswordsPage } from './pages/dashboard/passwords';
 import { SettingsPage } from './pages/dashboard/settings';
@@ -30,6 +32,8 @@ export const routes: Routes = [
             { path: 'passwords', component: PasswordsPage },
             { path: 'password-generator', component: PasswordGeneratorPage },
             { path: 'data-types', component: DataTypesPage },
+            { path: 'data-types/create', component: DataTypeCreatePage },
+            { path: 'data-types/:id/edit', component: DataTypeEditPage },
             { path: 'settings', component: SettingsPage },
         ],
     },

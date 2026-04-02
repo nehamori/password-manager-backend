@@ -28,6 +28,14 @@ class UserLoginTokenOrm(BaseSqlModel):
     expires_at: Mapped[datetime_tz]
 
 
+class UserDeviceResumeTokenOrm(BaseSqlModel):
+    __tablename__ = "user_device_resume_tokens"
+
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    token: Mapped[str] = mapped_column(primary_key=True)
+    expires_at: Mapped[datetime_tz]
+
+
 class EmailUserOrm(BaseSqlModel):
     __tablename__ = "email_users"
 
